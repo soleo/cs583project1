@@ -102,8 +102,11 @@ public class MSApriori {
 			}
 			//System.out.println(candidatesCnt.entrySet().toString());
 			finalsets.put(k, Fk);
-			//if (k == 2)
-				System.out.println(finalsets.entrySet().toString());
+			if (k == 2)
+			{
+				System.out.println("k==2"+finalsetsCnt.entrySet().toString());
+				System.out.println("k==2"+finalsets.entrySet().toString());
+			}
 		}
 		
 	}
@@ -122,12 +125,12 @@ public class MSApriori {
 			sortedItems_M.add(key);
 			System.out.print(key + ":" + sortedItems.get(key) + "--");
 		}
-
+		System.out.println();
 		for (itemSet itemset: sets){
 			
 			int[] itemindexes = new int[itemset.item.size()]; 
 			for (int index = 0; index < itemset.item.size(); index++){
-				System.out.println(cfg.MIS.get(itemset.item.get(index))+ " item:"+ itemset.item.get(index) + " transaction:"+ itemset.transaction );
+				//System.out.println(cfg.MIS.get(itemset.item.get(index))+ " item:"+ itemset.item.get(index) + " transaction:"+ itemset.transaction );
 				itemindexes[index] = (int)(Float.parseFloat(cfg.MIS.get(itemset.item.get(index)))*100);
 			}
 			
@@ -135,6 +138,7 @@ public class MSApriori {
 			int[] indexes = new int[itemindexes.length];
 			qs.sort(itemindexes, indexes);
 			itemSet s = new itemSet();
+			//System.out.print("\n\n======"+indexes.length+"\n");
 			for (int i = 0; i < itemset.item.size(); i++)
 			{
 				//System.out.print(itemindexes[i]+" "+ indexes[i]+ ":");
@@ -182,11 +186,11 @@ public class MSApriori {
 	      //Map.Entry me = (Map.Entry)i.next();
 	      String item = (String)i.next();
 	      //candidates.add((String)me.getKey());
+	      candidates.add(item);
 	      //if (Integer.parseInt(me.getValue().toString())/(double)totalTrans >= Float.parseFloat(cfg.MIS.get(me.getKey()))){
-	      if (Integer.parseInt(support.get(item).toString())/(double)totalTrans >= Float.parseFloat(cfg.MIS.get(item))){
+	      if (Integer.parseInt(support.get(item).toString())/(float)totalTrans >= Float.parseFloat(cfg.MIS.get(item))){
 		      //value.add((String)me.getKey());
-	    	  value.add(item);
-	    	  candidates.add(item);
+	    	  value.add(item);  
 	    	  F1.add(value);
 	    	  finalsetsCnt.put(value, Integer.parseInt(support.get(item).toString()));
 	      } 
@@ -204,10 +208,10 @@ public class MSApriori {
 		Vector<ArrayList<String>> candidates2 = new Vector<ArrayList<String>>();
 
 		for(int i = 0; i < candidates.size(); i++){
-			if (support.get(candidates.get(i))/(double)totalTrans >= Float.parseFloat(cfg.MIS.get(candidates.get(i)))){
+			if (support.get(candidates.get(i))/(float)totalTrans >= Float.parseFloat(cfg.MIS.get(candidates.get(i)))){
 				
 				for (int j = i+1; j< candidates.size(); j++) {
-					if (support.get(candidates.get(j))/(double)totalTrans >= Float.parseFloat(cfg.MIS.get(candidates.get(i)))
+					if (support.get(candidates.get(j))/(float)totalTrans >= Float.parseFloat(cfg.MIS.get(candidates.get(i)))
 							&& Math.abs((support.get(candidates.get(j))-support.get(candidates.get(i)))/(double)totalTrans) <= cfg.SDC){
 						//System.out.println("["+candidates.get(i)+", "+ candidates.get(j)+"]");
 						ArrayList<String> a = new ArrayList<String>();
@@ -218,7 +222,7 @@ public class MSApriori {
 				}
 			}	
 		}
-		//System.out.println(candidates2.toString());
+		System.out.println(" CAN 2"+candidates2.toString());
 		return candidates2;	
 	}
 	
