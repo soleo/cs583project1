@@ -39,11 +39,11 @@ public class project1 {
 		p2.readFile();
 		p2.parseDataByDelim("=");
 		cfg = p2.getConfig();
-		p3.readFile();
+		//p3.readFile();
 		
-		outputWriter p4 = new outputWriter("test.txt");
-		p4.writeLine("asdhf");
-		p4.writeLine("==asdf");
+		//outputWriter p4 = new outputWriter("test.txt");
+		//p4.writeLine("asdhf");
+		//p4.writeLine("==asdf");
 		MSApriori processor = new MSApriori(itemsets,cfg);
 		processor.run(false);
 		for (int i=1; i <= cfg.MIS.size(); i++) // number of items times runs

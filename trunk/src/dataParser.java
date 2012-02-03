@@ -15,8 +15,9 @@ public class dataParser extends Parser{
 		
 		for (String line : lines){
 			
-			if (line != null )
+			if (line != null && !line.trim().isEmpty() )
 			{
+
 				//System.out.println(cnt+": "+line);
 				try{
 					String[] tokens = line.split(delim);
