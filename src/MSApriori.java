@@ -127,7 +127,7 @@ public class MSApriori {
 			
 			int[] itemindexes = new int[itemset.item.size()]; 
 			for (int index = 0; index < itemset.item.size(); index++){
-				//System.out.println(cfg.MIS.get(itemset.item.get(index))+ " item:"+ itemset.item.get(index) + " transaction:"+ itemset.transaction );
+				System.out.println(cfg.MIS.get(itemset.item.get(index))+ " item:"+ itemset.item.get(index) + " transaction:"+ itemset.transaction );
 				itemindexes[index] = (int)(Float.parseFloat(cfg.MIS.get(itemset.item.get(index)))*100);
 			}
 			
