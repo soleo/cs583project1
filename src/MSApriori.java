@@ -21,7 +21,8 @@ public class MSApriori {
 	public HashMap<Integer, Vector<ArrayList<String>>> finalsets;
 	private boolean quiet;
 	Vector<ArrayList<String>> Fk;
-	
+	HashMap<ArrayList<String>, Integer> candidatesCnt;
+	public HashMap<ArrayList<String>, Integer> finalsetsCnt;
 	
 	MSApriori(){
 		System.out.println("This is our main algorithm called MS-Apriori");
@@ -41,9 +42,12 @@ public class MSApriori {
 		this.quiet = quiet;
 		if (!quiet)
 			System.out.println("begin processing");
+		
+		finalsetsCnt = new HashMap<ArrayList<String>, Integer>();
+		Vector<ArrayList<String>> candidatesK = null;
+		
 		sort();
 		init_pass();
-		Vector<ArrayList<String>> candidatesK = null;
 		
 		for (int k = 2; !finalsets.get(k-1).isEmpty(); k++){
 			if (k == 2)
@@ -51,7 +55,7 @@ public class MSApriori {
 			else
 				candidatesK = MScandidate_gen(k-1, Fk);
 			
-			HashMap<ArrayList<String>, Integer> candidatesCnt = new HashMap<ArrayList<String>, Integer>();
+			candidatesCnt = new HashMap<ArrayList<String>, Integer>();
 			
 			for (itemSet s: sortedItemsets){
 				for (ArrayList<String> candidates: candidatesK){
@@ -81,22 +85,26 @@ public class MSApriori {
 				}
 			}
 			
-			//System.out.println("ss"+candidatesK.toString());
 			Fk = new Vector<ArrayList<String>>();
 			Set<ArrayList<String>> candidates = candidatesCnt.keySet();
 			Iterator<ArrayList<String>> i = candidates.iterator();
-			System.out.println(candidatesCnt.entrySet().toString());
+			//System.out.println(candidatesCnt.entrySet().toString());
 			while (i.hasNext()){
 				ArrayList<String> me = (ArrayList<String>)i.next();
 				//System.out.println("ddd"+me.toString());
-			    if (candidatesCnt.get(me)/(double)totalTrans >= Float.parseFloat(cfg.MIS.get(me.get(0)))){
+			    if (
+			    		candidatesCnt.get(me)/(float)totalTrans 
+			    		>= Float.parseFloat(cfg.MIS.get(me.get(0)))
+			    	){
 			    	  Fk.add(me);  
-			    }
+					  finalsetsCnt.put(me, candidatesCnt.get(me));
+			    } 
 			}
-			System.out.println("Support Cnt: "+candidatesCnt.entrySet().toString());
+			//System.out.println(candidatesCnt.entrySet().toString());
 			finalsets.put(k, Fk);
+			//if (k == 2)
+				System.out.println(finalsets.entrySet().toString());
 		}
-		System.out.println("Final Sets:" +finalsets.entrySet().toString());
 		
 	}
 	
@@ -180,6 +188,7 @@ public class MSApriori {
 	    	  value.add(item);
 	    	  candidates.add(item);
 	    	  F1.add(value);
+	    	  finalsetsCnt.put(value, Integer.parseInt(support.get(item).toString()));
 	      } 
 	      
 	      if (!quiet)
@@ -229,7 +238,7 @@ public class MSApriori {
 					}
 					if (matchcnt == k-1){
 						ArrayList<String> candidates = new ArrayList<String>();
-						if (Float.parseFloat(cfg.MIS.get(Fk.get(i).get(k-1))) <= Float.parseFloat(cfg.MIS.get(Fk.get(j).get(k-1)))
+						if (Float.parseFloat(cfg.MIS.get(Fk.get(i).get(k-1))) < Float.parseFloat(cfg.MIS.get(Fk.get(j).get(k-1)))
 								&& Math.abs((support.get(Fk.get(i).get(k-1))-support.get(Fk.get(j).get(k-1)))/(double)totalTrans) <= cfg.SDC) {
 							
 							for (String s : Fk.get(i)) 
@@ -237,14 +246,13 @@ public class MSApriori {
 							candidates.add(Fk.get(j).get(k-1));
 							candidatesK.add(candidates);
 						}
-						/*else if (Float.parseFloat(cfg.MIS.get(Fk.get(i).get(k-1))) > Float.parseFloat(cfg.MIS.get(Fk.get(j).get(k-1))) 
-								&& Math.abs((support.get(Fk.get(i).get(k-1))-support.get(Fk.get(j).get(k-1)))/(double)totalTrans) <= cfg.SDC){
+						/*else if (Float.parseFloat(cfg.MIS.get(Fk.get(i).get(k-1))) >= Float.parseFloat(cfg.MIS.get(Fk.get(j).get(k-1))) 
+								&& Math.abs((support.get(Fk.get(i).get(k-1))-support.get(Fk.get(j).get(k-1)))/(double)totalTrans) < cfg.SDC){
 							for (String s : Fk.get(j)) 
 								candidates.add(s);
 							candidates.add(Fk.get(i).get(k-1));
 							candidatesK.add(candidates);
-						}	*/
-						
+						}*/	
 						for (int l=0; l < candidates.size(); l++)
 						{
 							ArrayList<String> s = (ArrayList<String>) candidates.clone();
@@ -261,7 +269,7 @@ public class MSApriori {
 						
 					}
 				}
-		//System.out.println("combination: "+ candidatesK.toString());
+		System.out.println("combination: "+ candidatesK.toString());
 		return candidatesK;
 	}
 	

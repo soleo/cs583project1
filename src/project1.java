@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 
 /**
@@ -45,7 +46,24 @@ public class project1 {
 		p4.writeLine("==asdf");
 		MSApriori processor = new MSApriori(itemsets,cfg);
 		processor.run(false);
-		
+		for (int i=1; i <= cfg.MIS.size(); i++) // number of items times runs
+		{
+			if (processor.finalsets.containsKey(new Integer(i)))
+			{
+				Vector<ArrayList<String>> Fk = processor.finalsets.get(i);
+				if(Fk.size() == 0) break; // last set is usually empty
+				System.out.println("\n\nNo. of length "+i+" frequent itemsets: "+Fk.size() + "");
+				for (ArrayList<String> c : Fk)
+				{
+					System.out.print("{ ");
+					for (String item: c) System.out.print(item + " ");
+					System.out.print("}");
+					if (processor.finalsetsCnt.containsKey(c))
+						System.out.println(" : support-count = " + processor.finalsetsCnt.get(c));
+				}
+			}
+			else break;
+		}
 	}
 
 }
