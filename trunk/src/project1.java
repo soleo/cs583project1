@@ -39,7 +39,7 @@ public class project1 {
 		p2.readFile();
 		p2.parseDataByDelim("=");
 		cfg = p2.getConfig();
-		//p3.readFile();
+		//p3.readFile(); 
 		
 		//outputWriter p4 = new outputWriter("test.txt");
 		//p4.writeLine("asdhf");
