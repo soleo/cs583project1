@@ -1,4 +1,5 @@
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -46,23 +47,46 @@ public class project1 {
 		//p4.writeLine("==asdf");
 		MSApriori processor = new MSApriori(itemsets,cfg);
 		processor.run(false);
-		for (int i=1; i <= cfg.MIS.size(); i++) // number of items times runs
-		{
-			if (processor.finalsets.containsKey(new Integer(i)))
+		
+		try {
+			BufferedWriter fout = new BufferedWriter(new FileWriter(outfile));
+		
+			for (int i=1; i <= cfg.MIS.size(); i++) // number of items times runs
 			{
-				Vector<ArrayList<String>> Fk = processor.finalsets.get(i);
-				if(Fk.size() == 0) break; // last set is usually empty
-				System.out.println("\n\nNo. of length "+i+" frequent itemsets: "+Fk.size() + "");
-				for (ArrayList<String> c : Fk)
+				if (processor.finalsets.containsKey(new Integer(i)))
 				{
-					System.out.print("{ ");
-					for (String item: c) System.out.print(item + " ");
-					System.out.print("}");
-					if (processor.finalsetsCnt.containsKey(c))
-						System.out.println(" : support-count = " + processor.finalsetsCnt.get(c));
+					Vector<ArrayList<String>> Fk = processor.finalsets.get(i);
+					if(Fk.size() == 0) break; // last set is usually empty
+					System.out.println("\n\nNo. of length "+i+" frequent itemsets: "+Fk.size() + "");
+					fout.write("\n\nNo. of length "+i+" frequent itemsets: "+Fk.size() + "\n");
+					for (ArrayList<String> c : Fk)
+					{
+						System.out.print("{ ");
+						fout.write("{ ");
+						
+						for (String item: c) 
+						{
+							System.out.print(item + " ");
+							fout.write(item + " ");
+						}
+						
+						System.out.print("}");
+						fout.write("}");
+						
+						if (processor.finalsetsCnt.containsKey(c))
+						{
+							System.out.println(" : support-count = " + processor.finalsetsCnt.get(c));
+							fout.write(" : support-count = " + processor.finalsetsCnt.get(c)+"\n");
+						}
+					}
 				}
+				else break;
 			}
-			else break;
+			fout.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Error writing to file");
 		}
 	}
 
