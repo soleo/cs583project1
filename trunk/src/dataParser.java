@@ -38,7 +38,7 @@ public class dataParser extends Parser{
 			
 		}
 		
-		printItemsets();
+		//printItemsets();
 	}
 	public ArrayList<itemSet> getData(){
 		return itemsets;

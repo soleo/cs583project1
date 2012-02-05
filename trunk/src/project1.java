@@ -46,7 +46,7 @@ public class project1 {
 		//p4.writeLine("asdhf");
 		//p4.writeLine("==asdf");
 		MSApriori processor = new MSApriori(itemsets,cfg);
-		processor.run(false);
+		processor.run(true);
 		
 		try {
 			BufferedWriter fout = new BufferedWriter(new FileWriter(outfile));

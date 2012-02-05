@@ -102,11 +102,12 @@ public class MSApriori {
 			}
 			//System.out.println(candidatesCnt.entrySet().toString());
 			finalsets.put(k, Fk);
-			if (k == 2)
+			if (!quiet)
 			{
-				System.out.println("k==2"+finalsetsCnt.entrySet().toString());
-				System.out.println("k==2"+finalsets.entrySet().toString());
+				System.out.println(finalsetsCnt.entrySet().toString());
+				System.out.println(finalsets.entrySet().toString());
 			}
+			System.out.print(". ");
 		}
 		
 	}
@@ -123,9 +124,11 @@ public class MSApriori {
 		for (String key: sortedItems.keySet())
 		{
 			sortedItems_M.add(key);
-			System.out.print(key + ":" + sortedItems.get(key) + "--");
+			if (!quiet)
+				System.out.print(key + ":" + sortedItems.get(key) + "--");
 		}
-		System.out.println();
+		if (!quiet)
+			System.out.println();
 		for (itemSet itemset: sets){
 			
 			int[] itemindexes = new int[itemset.item.size()]; 
@@ -139,6 +142,7 @@ public class MSApriori {
 			qs.sort(itemindexes, indexes);
 			itemSet s = new itemSet();
 			//System.out.print("\n\n======"+indexes.length+"\n");
+	
 			for (int i = 0; i < itemset.item.size(); i++)
 			{
 				//System.out.print(itemindexes[i]+" "+ indexes[i]+ ":");
@@ -150,11 +154,12 @@ public class MSApriori {
 			//System.out.print("\n");
 		}
 		totalTrans = cnt;
-		
-		for (itemSet qs: sortedItemsets){
+		if (!quiet){
+			for (itemSet qs: sortedItemsets){
 			//for (int index = 0; index < qs.item.size(); index++){
 				System.out.println("transaction: "+ qs.transaction+ " item: "+ qs.item.toString());	
 			//}
+			}
 		}
 		
 	}
@@ -222,7 +227,7 @@ public class MSApriori {
 				}
 			}	
 		}
-		System.out.println(" CAN 2"+candidates2.toString());
+		//System.out.println(" CAN 2"+candidates2.toString());
 		return candidates2;	
 	}
 	
@@ -273,7 +278,7 @@ public class MSApriori {
 						
 					}
 				}
-		System.out.println("combination: "+ candidatesK.toString());
+		//System.out.println("combination: "+ candidatesK.toString());
 		return candidatesK;
 	}
 	
