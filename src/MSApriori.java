@@ -35,7 +35,7 @@ public class MSApriori {
 		sortedItemsets = new ArrayList<itemSet>();
 		support = new HashMap<String, Integer>();
 		finalsets = new HashMap<Integer, Vector<ArrayList<String>>>();
-		
+		finalsetsCnt = new HashMap<ArrayList<String>, Integer>();
 	}
 	
 	public void run(boolean quiet){
@@ -43,7 +43,6 @@ public class MSApriori {
 		if (!quiet)
 			System.out.println("begin processing");
 		
-		finalsetsCnt = new HashMap<ArrayList<String>, Integer>();
 		Vector<ArrayList<String>> candidatesK = null;
 		
 		sort();
@@ -63,7 +62,8 @@ public class MSApriori {
 					int matchcnt = 0;
 					for(int index = 0; index < candidates.size(); index++ )
 					{
-						if( s.item.toString().indexOf(candidates.get(index)) > 0)
+						for(String it: s.item)
+							if( it.equals(candidates.get(index)))
 							matchcnt++;
 					}
 					if (matchcnt == candidates.size()){
@@ -192,7 +192,7 @@ public class MSApriori {
 	      String item = (String)i.next();
 	      //candidates.add((String)me.getKey());
 	      candidates.add(item);
-	      //if (Integer.parseInt(me.getValue().toString())/(double)totalTrans >= Float.parseFloat(cfg.MIS.get(me.getKey()))){
+	      //if (Integer.parseInt(me.getValue().toString())/(float)totalTrans >= Float.parseFloat(cfg.MIS.get(me.getKey()))){
 	      if (Integer.parseInt(support.get(item).toString())/(float)totalTrans >= Float.parseFloat(cfg.MIS.get(item))){
 		      //value.add((String)me.getKey());
 	    	  value.add(item);  
@@ -201,8 +201,8 @@ public class MSApriori {
 	      } 
 	      
 	      if (!quiet)
-	    	  System.out.println(item + " : " + Integer.parseInt(support.get(item).toString())/(double)totalTrans + " :"+cfg.MIS.get(item));
-	    	  //System.out.println(me.getKey() + " : " + Integer.parseInt(me.getValue().toString())/(double)totalTrans + " :"+cfg.MIS.get(me.getKey()));
+	    	  System.out.println(item + " : " + Integer.parseInt(support.get(item).toString())/(float)totalTrans + " :"+cfg.MIS.get(item));
+	    	  //System.out.println(me.getKey() + " : " + Integer.parseInt(me.getValue().toString())/(float)totalTrans + " :"+cfg.MIS.get(me.getKey()));
 	    }
 	    //F1.add(value);
 	    finalsets.put(1, F1);	
@@ -217,7 +217,7 @@ public class MSApriori {
 				
 				for (int j = i+1; j< candidates.size(); j++) {
 					if (support.get(candidates.get(j))/(float)totalTrans >= Float.parseFloat(cfg.MIS.get(candidates.get(i)))
-							&& Math.abs((support.get(candidates.get(j))-support.get(candidates.get(i)))/(double)totalTrans) <= cfg.SDC){
+							&& Math.abs((support.get(candidates.get(j))-support.get(candidates.get(i)))/(float)totalTrans) <= cfg.SDC){
 						//System.out.println("["+candidates.get(i)+", "+ candidates.get(j)+"]");
 						ArrayList<String> a = new ArrayList<String>();
 						a.add(candidates.get(i));
@@ -248,7 +248,7 @@ public class MSApriori {
 					if (matchcnt == k-1){
 						ArrayList<String> candidates = new ArrayList<String>();
 						if (Float.parseFloat(cfg.MIS.get(Fk.get(i).get(k-1))) < Float.parseFloat(cfg.MIS.get(Fk.get(j).get(k-1)))
-								&& Math.abs((support.get(Fk.get(i).get(k-1))-support.get(Fk.get(j).get(k-1)))/(double)totalTrans) <= cfg.SDC) {
+								&& Math.abs((support.get(Fk.get(i).get(k-1))-support.get(Fk.get(j).get(k-1)))/(float)totalTrans) <= cfg.SDC) {
 							
 							for (String s : Fk.get(i)) 
 								candidates.add(s);
@@ -256,7 +256,7 @@ public class MSApriori {
 							candidatesK.add(candidates);
 						}
 						/*else if (Float.parseFloat(cfg.MIS.get(Fk.get(i).get(k-1))) >= Float.parseFloat(cfg.MIS.get(Fk.get(j).get(k-1))) 
-								&& Math.abs((support.get(Fk.get(i).get(k-1))-support.get(Fk.get(j).get(k-1)))/(double)totalTrans) < cfg.SDC){
+								&& Math.abs((support.get(Fk.get(i).get(k-1))-support.get(Fk.get(j).get(k-1)))/(float)totalTrans) < cfg.SDC){
 							for (String s : Fk.get(j)) 
 								candidates.add(s);
 							candidates.add(Fk.get(i).get(k-1));
@@ -292,9 +292,9 @@ public class MSApriori {
 
 		public int compare(Object a, Object b) {
 			//return ((Comparable)base.get(a)).compareTo(((Comparable)base.get(b)));
-			if(Double.parseDouble((String)base.get(a)) >= Double.parseDouble((String)base.get(b))) {
+			if(Float.parseFloat((String)base.get(a)) >= Float.parseFloat((String)base.get(b))) {
 				return 1;
-			} /*else if(Double.parseDouble((String)base.get(a)) == Double.parseDouble((String)base.get(b)))  {
+			} /*else if(float.parseDouble((String)base.get(a)) == float.parseDouble((String)base.get(b)))  {
 			      return 0;
 			    }*/ else {
 			    	return -1;
