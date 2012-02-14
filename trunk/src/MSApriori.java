@@ -186,14 +186,26 @@ public class MSApriori {
 
 	    Iterator i = sortedItems_M.iterator();//set.iterator();
 	    
-	    while(i.hasNext()){
-	      ArrayList<String> value = new ArrayList<String>();
+	    while(i.hasNext()){	// create L
+	      //ArrayList<String> value = new ArrayList<String>();
 	      //Map.Entry me = (Map.Entry)i.next();
 	      String item = (String)i.next();
 	      //candidates.add((String)me.getKey());
-	      candidates.add(item);
-	      //if (Integer.parseInt(me.getValue().toString())/(float)totalTrans >= Float.parseFloat(cfg.MIS.get(me.getKey()))){
-	      if (Integer.parseInt(support.get(item).toString())/(float)totalTrans >= Float.parseFloat(cfg.MIS.get(item))){
+	      if(candidates.size() == 0 && Integer.parseInt(support.get(item).toString())/(float)totalTrans >= Float.parseFloat(cfg.MIS.get(item)))
+	    	  // pick the first item that meets its MIS
+	    	  candidates.add(item);
+	      else if (candidates.size() > 0 // first item is picked
+	    		  && Integer.parseInt(support.get(item).toString())/(float)totalTrans
+	    		  		>= Float.parseFloat(cfg.MIS.get(candidates.get(0))) // compare sup with 1st's MIS
+	    		  )
+	    	  candidates.add(item);
+	    }
+	    
+	    for(String item: candidates)	// create F1
+	    {
+	    	ArrayList<String> value = new ArrayList<String>();
+	    	//if (Integer.parseInt(me.getValue().toString())/(float)totalTrans >= Float.parseFloat(cfg.MIS.get(me.getKey()))){
+	    	if (Integer.parseInt(support.get(item).toString())/(float)totalTrans >= Float.parseFloat(cfg.MIS.get(item))){
 		      //value.add((String)me.getKey());
 	    	  value.add(item);  
 	    	  F1.add(value);
